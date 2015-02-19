@@ -4,7 +4,7 @@ var express = require('express'),
   IssueType = mongoose.model('IssueType');
 
   module.exports = function (app) {
-  app.use('/issueTypes', router);
+  app.use('/issuetypes', router);
 };
 
 function convertMongoIssueType(issueType) {
@@ -29,7 +29,7 @@ router.route('/')
     res.json(_.map(issueTypes, function (issueType){
       return convertMongoIssueType(issueType);
     }));
-  });
+  })
 
   .post(function (req, res, next){
     var issueType = new IssueType({
