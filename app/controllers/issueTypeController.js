@@ -4,24 +4,16 @@ var express = require('express'),
   IssueType = mongoose.model('IssueType');
 
   module.exports = function (app) {
-  app.use('/issuetypes', router);
+  app.use('/api/issuetypes', router);
 };
 
 function convertMongoIssueType(issueType) {
   return {
     id: issueType.id,
-    shortName: issueType.shortName,
+    name: issueType.name,
     description: issueType.description
   }
 }
-
-router.get('/', function (req, res, next) {
-  IssueType.find(function (err, issueTypes) {
-    if (err) return next(err);
-    res.json(issueTypes);
-  });
-});
-
 
 router.route('/')
   .get(function (err, issueTypes){
@@ -33,7 +25,7 @@ router.route('/')
 
   .post(function (req, res, next){
     var issueType = new IssueType({
-      shortName: req.body.shortName,
+      name: req.body.name,
       description: req.body.description
     });
 
@@ -58,7 +50,7 @@ router.route('/:id')
 
   .put(function (req, res, next){
     IssueType.findById(req.params.id, function (err, issueType){
-      issueType.shortName = req.body.shortName;
+      issueType.name = req.body.name;
       issueType.description = req.body.description;
 
       issueType.save(function (err, issueTypeSaved){
