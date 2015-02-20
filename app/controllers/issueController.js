@@ -46,3 +46,24 @@ router.route('/')
 			res.status(201).json(convertIssue(issueSaved));
 		});
 	})
+
+router.route('/:id')
+	.get(function (req, res, next){
+		Issue.findById(req.params.id, function(err, issue) {
+			res.json(convertIssue(issue));
+		});
+	})
+
+	.put(function (req, res, next){
+		Issue.findById(req.params.id, function(err, issue) {
+			issue.responsable = req.body.responsable;
+			issue.description = req.body.description;
+			issue.latitude = req.body.latitude;
+			issue.longitude = req.body.longitude;
+			issueType: req.body.issueType;
+
+			issue.save(function(err, issueSaved) {
+				res.json(convertIssue(issueSaved));
+			});
+		});
+	});
