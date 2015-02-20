@@ -1,3 +1,7 @@
+Laurent Lienher & Anthony Da Silva
+Heroku URL : https://heigvd-express.herokuapp.com/
+
+
 # Smart City - Citizen Engagement - Express Skeleton
 
 ## Introduction
