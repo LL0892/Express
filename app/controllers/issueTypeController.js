@@ -1,4 +1,6 @@
-var express = require('express'),
+var
+   _ = require('underscore'),
+   express = require('express'),
   router = express.Router(),
   mongoose = require('mongoose'),
   IssueType = mongoose.model('IssueType');

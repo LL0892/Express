@@ -40,5 +40,9 @@ router.route('/')
 			latitude: req.body.latitude,
 			longitude: req.body.longitude,
 			issueType: req.body.issueType
-		})
+		});
+
+		issue.save(function(err, issueSaved) {
+			res.status(201).json(convertIssue(issueSaved));
+		});
 	})
