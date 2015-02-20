@@ -3,8 +3,8 @@ var
 	express = require('express'),
   router = express.Router(),
   mongoose = require('mongoose'),
-  Action = mongoose.model('Action');
-  Issue = mangoose.model('Issue');
+  Action = mongoose.model('Action'),
+  Issue = mongoose.model('Issue');
 
  module.exports = function (app) {
   app.use('/api/actions', router);
@@ -33,7 +33,7 @@ router.route('/')
 		var action = new Action({
 			author: req.body.author,
 			type: req.body.type,
-			content: req.body.content
+			content: req.body.content,
 			issueId : req.body.issueId
 		});
 
