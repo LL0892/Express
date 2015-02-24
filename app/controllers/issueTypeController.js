@@ -18,11 +18,13 @@ function convertMongoIssueType(issueType) {
 }
 
 router.route('/')
-  .get(function (err, issueTypes){
-    if (err) return next(err);
-    res.json(_.map(issueTypes, function (issueType){
-      return convertMongoIssueType(issueType);
-    }));
+  .get(function(req, res, next) {
+    IssueType.find(function (err, issueTypes) {
+      if (err) return next(err);
+      res.json(_.map(issueTypes, function(issueType) {
+        return convertMongoIssueType(issueType);
+      }));
+    });
   })
 
   .post(function (req, res, next){
@@ -39,7 +41,6 @@ router.route('/')
 router.route('/:id')
   .get(function (req, res, next){
   	IssueType.findById(function (err, issueType){
-  		if(err) return next (err);
   		res.json(convertMongoIssueType(issueType));
   	});
   })

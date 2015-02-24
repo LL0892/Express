@@ -56,6 +56,7 @@ router.route('/:id')
 
 	.put(function (req, res, next){
 		Issue.findById(req.params.id, function(err, issue) {
+			issue.author = req.body.author;
 			issue.responsable = req.body.responsable;
 			issue.description = req.body.description;
 			issue.latitude = req.body.latitude;
