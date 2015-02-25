@@ -18,7 +18,8 @@ function convertIssue (issue){
 		status: issue.status,
 		latitude: issue.latitude,
 		longitude: issue.longitude,
-		issueType: issue.issueType
+		issueType: issue.issueType,
+		comments: issue.comments
 	}
 }
 

@@ -44,9 +44,6 @@ router.route('/')
 				issue.save(function(err, issueSaved) {
 					res.status(201).json(convertAction(actionSaved));
 				});
-			});
-//			
+			});	
 		});
-
-		//find by id and update issue
 	})
