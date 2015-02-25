@@ -47,3 +47,30 @@ router.route('/')
 			});	
 		});
 	})
+
+// GET comment -> done when fetching issues with GET issues
+// POST comment -> done here
+// Delete comment by Id -> done here
+// Put comment by Id -> done here
+router.route('/comments/')
+	.post(function (req, res, next){
+		var action = new Action({
+			author: req.body.author,
+			type: "post a new comment",
+			content: req.body.comment,
+			issueId : req.body.issueId
+		});
+
+		Issue.findById(req.body.issueId, function(){
+			issue.comments.push(req.body.content);
+		})
+	});
+
+router.route('/comments//:id')
+	.put(function (req, res, next){
+
+	})
+
+	.delete(function (req, res, next){
+
+	})

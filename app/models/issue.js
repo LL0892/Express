@@ -13,12 +13,14 @@ var mongoose = require('mongoose'),
     author: {type: String, required: true},
     responsable: {type: String, required: false},
   	description: {type: String, required: true},
+    tag: {type: [String], required: false},
     status: {type: String, default: "created"},
     latitude: {type: Number, required: true},
     longitude: {type: Number, required: true},
-  	updatedOn: {type: Date, default: Date.now },
+    createdOn: {type: Date, default: Date.now},
+  	updatedOn: {type: Date, required: false},
   	issueType: {type: Schema.Types.ObjectId, ref: 'issueType'},
-    comments: [Comments]
+    comments: {type: [Comments], required: false}
   });
 
   Issue.pre('save', function(next){
@@ -26,5 +28,4 @@ var mongoose = require('mongoose'),
   	next();
   });
 
-  //mongoose.model('Comments', Comments);
   mongoose.model('Issue', Issue);
