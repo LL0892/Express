@@ -29,7 +29,7 @@ router.route('/')
 		})
 	})
 
-	.post(function (req, res, next){
+/*	.post(function (req, res, next){
 		var action = new Action({
 			author: req.body.author,
 			type: req.body.type,
@@ -38,21 +38,17 @@ router.route('/')
 		});
 
 		//safe action
-		action.save(function(err, actionSaved) {
+		action.save(function (err, actionSaved) {
 			Issue.findById(req.body.issueId, function (err, issue){
 				issue.actions.push(actionSaved);
-				issue.save(function(err, issueSaved) {
+				issue.save(function (err, issueSaved) {
 					res.status(201).json(convertAction(actionSaved));
 				});
 			});	
 		});
-	})
+	})*/
 
-// GET comment -> done when fetching issues with GET issues
-// POST comment -> done here
-// Delete comment by Id -> done here
-// Put comment by Id -> done here
-router.route('/comments/')
+router.route('/comments')
 	.post(function (req, res, next){
 		var action = new Action({
 			author: req.body.author,
@@ -61,12 +57,24 @@ router.route('/comments/')
 			issueId : req.body.issueId
 		});
 
-		Issue.findById(req.body.issueId, function(){
-			issue.comments.push(req.body.content);
-		})
+		var comment = {
+			author: req.body.author,
+			body: req.body.content
+		}
+
+		action.save(function (err, actionSaved){
+			if(err) return next(err);
+			Issue.findById(req.body.issueId, function (err, issue){
+				issue.comments.push(comment);
+				issue.save(function (err, issueSaved){
+					if(err) return next(err);
+					res.status(201).json(convertAction(actionSaved));
+				});
+			});
+		});
 	});
 
-router.route('/comments//:id')
+router.route('/comments/:id')
 	.put(function (req, res, next){
 
 	})
