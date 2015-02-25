@@ -62,8 +62,8 @@ router.route('/:id')
 			issue.description = req.body.description;
 			issue.latitude = req.body.latitude;
 			issue.longitude = req.body.longitude;
-			issue.issueType: req.body.issueType;
-			issue.updatedOn: Date.now;
+			issue.issueType = req.body.issueType;
+			issue.updatedOn = Date.now;
 
 			issue.save(function(err, issueSaved) {
 				res.json(convertIssue(issueSaved));
