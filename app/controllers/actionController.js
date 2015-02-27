@@ -104,12 +104,12 @@ router.route('/comments/:id')
 				issue.save(function (err, issueSaved){
 					if(err) return next(err);
 					res.status(201).json(convertAction(actionSaved));
-				})
+				});
 			});
 		});
 	});
 
-// Actions for status
+// Actions for status change
 router.route('/status')
 	.put(function (req, res, next){
 		var action = new Action({
@@ -127,7 +127,30 @@ router.route('/status')
 				issue.save(function (err, issueSaved){
 					if(err) return next(err);
 					res.status(201).json(convertAction(actionSaved));
-				})
+				});
+			});
+		});
+	});
+
+// Actions for responsable change
+router.route('/responsable')
+	.put(function (req, res, next){
+		var action = new Action({
+			author: req.body.author,
+			type: "Change the "+req.body.issueId+" issue responsable to "+req.body.content,
+			content: req.body.content,
+			issueId : req.body.issueId
+		});
+
+		action.save(function (err, actionSaved){
+			if(err) return next(err);
+			Issue.findById(req.body.issueId, function (err, issue){
+				if(err) return next(err);
+				issue.responsable = req.body.content;
+				issue.save(function (err, issueSaved){
+					if(err) return next(err);
+					res.status(201).json(convertAction(actionSaved));
+				});
 			});
 		});
 	});
