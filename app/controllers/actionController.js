@@ -77,7 +77,7 @@ router.route('/comments/:id')
 					if(issue.comments[i]._id == req.body.commentId){
 						issue.comments[i].body = req.body.content;
 					}
-					// save the issue with comment modified
+					// save the issue with comment modified and return the saved action
 					issue.save(function (err, issueSaved){
 						if(err) return next(err);
 						res.status(201).json(convertAction(actionSaved));
@@ -95,8 +95,14 @@ router.route('/comments/:id')
 			commentId : req.body.commentId
 		});
 
-		Issue.findById(req.params.id, function (err, issue){
-			if(err) return next(err);
-			// status(201)
+		action.save(function (err, actionSaved){
+			Issue.findById(req.params.id, function (err, issue){
+				if(err) return next(err);
+				issue.comments.id(req.body.commentId).remove();
+				issue.save(function (err, issueSaved){
+					if(err) return next(err);
+					res.status(201).json(convertAction(actionSaved));
+				})
+			});
 		});
 	})
