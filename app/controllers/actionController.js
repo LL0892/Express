@@ -15,7 +15,9 @@ function convertAction (action){
 		id: action.id,
 		author: action.author,
 		type: action.type,
-		content: action.content
+		content: action.content,
+		issueId: action.issueId,
+		commentId: action.commentId
 	}
 }
 
@@ -27,32 +29,13 @@ router.route('/')
 				return convertAction(action);				
 			}))
 		})
-	})
-
-/*	.post(function (req, res, next){
-		var action = new Action({
-			author: req.body.author,
-			type: req.body.type,
-			content: req.body.content,
-			issueId : req.body.issueId
-		});
-
-		//safe action
-		action.save(function (err, actionSaved) {
-			Issue.findById(req.body.issueId, function (err, issue){
-				issue.actions.push(actionSaved);
-				issue.save(function (err, issueSaved) {
-					res.status(201).json(convertAction(actionSaved));
-				});
-			});	
-		});
-	})*/
+	});
 
 router.route('/comments')
 	.post(function (req, res, next){
 		var action = new Action({
 			author: req.body.author,
-			type: "post a new comment",
+			type: "Create a new comment",
 			content: req.body.comment,
 			issueId : req.body.issueId
 		});
@@ -65,6 +48,7 @@ router.route('/comments')
 		action.save(function (err, actionSaved){
 			if(err) return next(err);
 			Issue.findById(req.body.issueId, function (err, issue){
+				if(err) return next(err);
 				issue.comments.push(comment);
 				issue.save(function (err, issueSaved){
 					if(err) return next(err);
@@ -76,7 +60,31 @@ router.route('/comments')
 
 router.route('/comments/:id')
 	.put(function (req, res, next){
+		var action = new Action({
+			author: req.body.author,
+			type: "Modify an existing comment",
+			content: req.body.comment,
+			issueId : req.body.issueId,
+			commentId : req.body.commentId
+		});
 
+		action.save(function (err, actionSaved){
+			if(err) return next(err);
+			Issue.findById(req.params.id, function (err, issue){
+				if(err) return next(err);
+				for (var i = issue.comments.length - 1; i >= 0; i--) {
+					// modify comment's body
+					if(issue.comments[i]._id == req.body.commentId){
+						issue.comments[i].body = req.body.content;
+					}
+					// save the issue with comment modified
+					issue.save(function (err, issueSaved){
+						if(err) return next(err);
+						res.status(201).json(convertAction(actionSaved));
+					});
+				}
+			});
+		});
 	})
 
 	.delete(function (req, res, next){
