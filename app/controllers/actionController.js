@@ -21,6 +21,7 @@ function convertAction (action){
 	}
 }
 
+// GET all actions
 router.route('/')
 	.get(function (req, res, next){
 		Action.find(function (err, actions){
@@ -31,12 +32,13 @@ router.route('/')
 		})
 	});
 
+// Actions for comments
 router.route('/comments')
 	.post(function (req, res, next){
 		var action = new Action({
 			author: req.body.author,
 			type: "Create a new comment",
-			content: req.body.comment,
+			content: req.body.content,
 			issueId : req.body.issueId
 		});
 
@@ -63,7 +65,7 @@ router.route('/comments/:id')
 		var action = new Action({
 			author: req.body.author,
 			type: "Modify an existing comment",
-			content: req.body.comment,
+			content: req.body.content,
 			issueId : req.body.issueId,
 			commentId : req.body.commentId
 		});
@@ -105,4 +107,27 @@ router.route('/comments/:id')
 				})
 			});
 		});
-	})
+	});
+
+// Actions for status
+router.route('/status')
+	.put(function (req, res, next){
+		var action = new Action({
+			author: req.body.author,
+			type: "Change the "+req.body.issueId+" issue status to "+req.body.content,
+			content: req.body.content,
+			issueId : req.body.issueId
+		});
+
+		action.save(function (err, actionSaved){
+			if(err) return next(err);
+			Issue.findById(req.body.issueId, function (err, issue){
+				if(err) return next(err);
+				issue.status = req.body.content;
+				issue.save(function (err, issueSaved){
+					if(err) return next(err);
+					res.status(201).json(convertAction(actionSaved));
+				})
+			});
+		});
+	});
