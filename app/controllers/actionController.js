@@ -88,5 +88,15 @@ router.route('/comments/:id')
 	})
 
 	.delete(function (req, res, next){
+		var action = new Action({
+			author: req.body.author,
+			type: "Remove an existing comment",
+			issueId : req.body.issueId,
+			commentId : req.body.commentId
+		});
 
+		Issue.findById(req.params.id, function (err, issue){
+			if(err) return next(err);
+			// status(201)
+		});
 	})
