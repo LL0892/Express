@@ -17,6 +17,11 @@ function convertMongoIssueType(issueType) {
   }
 }
 
+/*
+Get all issue types or crate a new issue type
+Path : /api/issuetypes/
+Verbs : GET, POST
+*/
 router.route('/')
 // Get all issue types
   .get(function(req, res, next) {
@@ -40,6 +45,12 @@ router.route('/')
     });
   });
 
+/*
+Get a specific issue type, modify an existing issue type, and delete a existing issue type
+Path : /api/issuetypes/:id
+Params : id is an existing issue type id
+Verbs : GET, PUT, DELETE
+*/
 router.route('/:id')
 // Get a issue type by id
   .get(function (req, res, next){

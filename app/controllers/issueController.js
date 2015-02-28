@@ -26,6 +26,11 @@ function convertIssue (issue){
 	}
 }
 
+/*
+Create an issue, and get all existing issues
+Path : /api/issues/
+Verbs : GET & POST
+*/
 router.route('/')
 // Get all issues
 	.get(function (req, res, next){
@@ -55,6 +60,12 @@ router.route('/')
 		});
 	})
 
+/*
+Display and modify a specific issue
+path : /api/issues/:id
+Params : id is an existing issue id
+verbs : GET & PUT
+*/
 router.route('/:id')
 // Get an issue by id
 	.get(function (req, res, next){
@@ -84,8 +95,15 @@ router.route('/:id')
 		});
 	});
 
-// Everybody should by able to tag an issue,
-// this endpoint provides the given functions
+/*
+Create, update and remove tags on issues
+------------------------------------------------------
+| /!\ PUT & DELETE aren't currently working properly |
+------------------------------------------------------
+Path : /api/issues/:id/tags
+Params : id is an existing issue id
+Verbs : POST, PUT, DELETE
+*/
 router.route('/:id/tags')
 // Add a new tag for an issue selected by id
 	.post(function (req, res, next){

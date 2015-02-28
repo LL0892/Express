@@ -20,6 +20,11 @@ function convertMongoUser(user) {
 	}
 }
 
+/*
+Get all users, and create a new user
+Path : /api/users/
+Verbs : GET & POST
+*/
 router.route('/')
 // Get all users
 	.get(function(req, res, next) {
@@ -45,8 +50,13 @@ router.route('/')
 		});
 	});
 
+/*
+Get a specific user, modify an existing user, and delete a existing user
+Path : /api/users/:id
+Params : id is an existing user id
+Verbs : GET, PUT, DELETE
+*/
 router.route('/:id')
-
 // Get user by id
 	.get(function(req, res, next) {
 		User.findById(req.params.id, function(err, user) {

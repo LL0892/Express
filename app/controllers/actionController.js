@@ -21,6 +21,11 @@ function convertAction (action){
 	}
 }
 
+/*
+Get all existing actions
+Path : /api/actions/
+Verbs : GET
+*/
 router.route('/')
 // Get all actions
 	.get(function (req, res, next){
@@ -32,6 +37,11 @@ router.route('/')
 		})
 	});
 
+/*
+Create a new comment, linked to a existing issue, create action log
+Path : /api/actions/comments/
+Verbs : POST
+*/
 router.route('/comments')
 // Create a new comment
 	.post(function (req, res, next){
@@ -60,6 +70,12 @@ router.route('/comments')
 		});
 	});
 
+/*
+Modify or remove an existing comment, create action log
+Path : /api/actions/comments/:id
+Params : id is an existing issue id
+Verbs : PUT & DELETE
+*/
 router.route('/comments/:id')
 // Modify an existing comment by issue id (comment id is in request body)
 	.put(function (req, res, next){
@@ -111,6 +127,11 @@ router.route('/comments/:id')
 		});
 	});
 
+/*
+Change the status of the selected issue, create action log
+Path : /api/actions/status
+Verbs : PUT
+*/
 router.route('/status')
 // Update the issue's status
 	.put(function (req, res, next){
@@ -134,6 +155,11 @@ router.route('/status')
 		});
 	});
 
+/*
+Change the responsable of the selected issue, create action log
+Path : /api/actions/responsable
+Verbs : PUT
+*/
 router.route('/responsable')
 // Update the issue's responsable
 	.put(function (req, res, next){

@@ -15,7 +15,7 @@ var mongoose = require('mongoose'),
 
   // Issue schema with embedded Comment schema
   var Issue = new Schema({
-    author: {type: String, required: true},
+    author: {type: Schema.Types.ObjectId, ref: 'user', required: true},
     responsable: {type: String, required: false},
   	description: {type: String, required: true},
     tags: {type: [Tags], required: false, lowercase: true, trim: true},
@@ -28,9 +28,9 @@ var mongoose = require('mongoose'),
     comments: {type: [Comments], required: false}
   });
 
-  Issue.pre('save', function(next){
-  	this.updatedOn = new Date();
-  	next();
-  });
+//  Issue.pre('save', function(next){
+//  	this.updatedOn = new Date();
+//  	next();
+//  });
 
   mongoose.model('Issue', Issue);
