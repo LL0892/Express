@@ -1,11 +1,16 @@
 var mongoose = require('mongoose'),
   Schema = mongoose.Schema;
 
-  // Comment schema
+  // Comments schema
   var Comments = new Schema({
     author: String,
     body: String,
     date: {type: Date, default: Date.now}
+  });
+
+  // Tags schema
+  var Tags = new Schema({
+    keyword: String
   });
 
   // Issue schema with embedded Comment schema
@@ -13,7 +18,7 @@ var mongoose = require('mongoose'),
     author: {type: String, required: true},
     responsable: {type: String, required: false},
   	description: {type: String, required: true},
-    tag: {type: [String], required: false},
+    tags: {type: [Tags], required: false, lowercase: true, trim: true},
     status: {type: String, default: "created"},
     latitude: {type: Number, required: true},
     longitude: {type: Number, required: true},

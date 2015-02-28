@@ -19,6 +19,7 @@ function convertIssue (issue){
 		latitude: issue.latitude,
 		longitude: issue.longitude,
 		issueType: issue.issueType,
+		tags: issue.tags,
 		comments: issue.comments,
 		createdOn: issue.createdOn,
 		updatedOn: issue.updatedOn
@@ -44,10 +45,12 @@ router.route('/')
 			description: req.body.description,
 			latitude: req.body.latitude,
 			longitude: req.body.longitude,
-			issueType: req.body.issueType
+			issueType: req.body.issueType,
+			tags: req.body.tags
 		});
 
-		issue.save(function(err, issueSaved) {
+		issue.save(function (err, issueSaved) {
+			if(err) return next(err);
 			res.status(201).json(convertIssue(issueSaved));
 		});
 	})
@@ -55,14 +58,16 @@ router.route('/')
 router.route('/:id')
 // Get an issue by id
 	.get(function (req, res, next){
-		Issue.findById(req.params.id, function(err, issue) {
+		Issue.findById(req.params.id, function (err, issue) {
+			if(err) return next(err);
 			res.json(convertIssue(issue));
 		});
 	})
 
 // Modify an existing issue
 	.put(function (req, res, next){
-		Issue.findById(req.params.id, function(err, issue) {
+		Issue.findById(req.params.id, function (err, issue) {
+			if(err) return next(err);
 			issue.author = req.body.author;
 			issue.responsable = req.body.responsable;
 			issue.description = req.body.description;
@@ -70,9 +75,62 @@ router.route('/:id')
 			issue.longitude = req.body.longitude;
 			issue.issueType = req.body.issueType;
 			issue.updatedOn = Date.now;
+			issue.tags = req.body.tags;
 
-			issue.save(function(err, issueSaved) {
+			issue.save(function (err, issueSaved) {
+				if(err) return next(err);
 				res.json(convertIssue(issueSaved));
+			});
+		});
+	});
+
+// Everybody should by able to tag an issue,
+// this endpoint provides the given functions
+router.route('/:id/tags')
+// Add a new tag for an issue selected by id
+	.post(function (req, res, next){
+		var word = {
+			keyword: req.body.tags
+		}
+
+		Issue.findById(req.params.id, function (err, issue) {
+			if(err) return next(err);
+			issue.tags.push(word);
+
+			issue.save(function (err, issueSaved){
+				if(err) return next(err);
+				res.json(convertIssue(issueSaved));
+			});
+		});
+	})
+
+// Update a tag selected by id, for an issue selected by id in the request
+	.put(function (req, res, next){
+		Issue.findById(req.params.id, function (err, issue) {
+			if(err) return next(err);
+			for (var i = issue.tags.length - 1; i >= 0; i--) {
+				if(issue.tags[i]._id == req.body.tagId){
+					console.log(req.params.tagId);
+					issue.tags[i].keyword = req.body.keyword;
+				}
+			};
+
+			issue.save(function (err, issueSaved){
+				if(err) return next(err);
+				res.json(convertIssue(issueSaved));
+			});
+		});
+	})
+
+// Remove an existing tag selected by id, for an issue selected by id in the request
+	.delete(function (req, res, next){
+		Issue.findById(req.params.id, function (err, issue){
+			if(err) return next (err);
+			issue.tags.id(req.body.tagId).remove();
+			issue.save()
+			issue.save(function (err, issueSaved){
+				if(err) return next(err);
+				res.status(201).json(convertIssue(issueSaved));
 			});
 		});
 	});
