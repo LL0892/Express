@@ -21,8 +21,8 @@ function convertAction (action){
 	}
 }
 
-// GET all actions
 router.route('/')
+// Get all actions
 	.get(function (req, res, next){
 		Action.find(function (err, actions){
 			if(err) return next(err);
@@ -32,8 +32,8 @@ router.route('/')
 		})
 	});
 
-// Actions for comments
 router.route('/comments')
+// Create a new comment
 	.post(function (req, res, next){
 		var action = new Action({
 			author: req.body.author,
@@ -61,6 +61,7 @@ router.route('/comments')
 	});
 
 router.route('/comments/:id')
+// Modify an existing comment by issue id (comment id is in request body)
 	.put(function (req, res, next){
 		var action = new Action({
 			author: req.body.author,
@@ -89,6 +90,7 @@ router.route('/comments/:id')
 		});
 	})
 
+// Delete an existing comment  by issue id (comment id is in request body)
 	.delete(function (req, res, next){
 		var action = new Action({
 			author: req.body.author,
@@ -109,8 +111,8 @@ router.route('/comments/:id')
 		});
 	});
 
-// Actions for status change
 router.route('/status')
+// Update the issue's status
 	.put(function (req, res, next){
 		var action = new Action({
 			author: req.body.author,
@@ -132,8 +134,8 @@ router.route('/status')
 		});
 	});
 
-// Actions for responsable change
 router.route('/responsable')
+// Update the issue's responsable
 	.put(function (req, res, next){
 		var action = new Action({
 			author: req.body.author,

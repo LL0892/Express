@@ -19,11 +19,14 @@ function convertIssue (issue){
 		latitude: issue.latitude,
 		longitude: issue.longitude,
 		issueType: issue.issueType,
-		comments: issue.comments
+		comments: issue.comments,
+		createdOn: issue.createdOn,
+		updatedOn: issue.updatedOn
 	}
 }
 
 router.route('/')
+// Get all issues
 	.get(function (req, res, next){
 		Issue.find(function (err, issues){
 			if(err) return next(err);
@@ -33,6 +36,7 @@ router.route('/')
 		});
 	})
 
+// Create a new issue
 	.post(function (req, res, next) {
 		var issue = new Issue({
 			author: req.body.author,
@@ -49,12 +53,14 @@ router.route('/')
 	})
 
 router.route('/:id')
+// Get an issue by id
 	.get(function (req, res, next){
 		Issue.findById(req.params.id, function(err, issue) {
 			res.json(convertIssue(issue));
 		});
 	})
 
+// Modify an existing issue
 	.put(function (req, res, next){
 		Issue.findById(req.params.id, function(err, issue) {
 			issue.author = req.body.author;

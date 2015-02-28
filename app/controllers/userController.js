@@ -21,6 +21,7 @@ function convertMongoUser(user) {
 }
 
 router.route('/')
+// Get all users
 	.get(function(req, res, next) {
 		User.find(function (err, users) {
 		  if (err) return next(err);
@@ -30,6 +31,7 @@ router.route('/')
 		});
 	})
 
+// Create a new user
 	.post(function (req, res, next) {
 		var user = new User({
 			firstname: req.body.firstname,
@@ -44,12 +46,15 @@ router.route('/')
 	});
 
 router.route('/:id')
+
+// Get user by id
 	.get(function(req, res, next) {
 		User.findById(req.params.id, function(err, user) {
 			res.json(convertMongoUser(user));
 		});
 	})
 
+// Update user by id
 	.put(function(req, res, next) {
 		User.findById(req.params.id, function(err, user) {
 			user.firstname = req.body.firstname;
@@ -63,6 +68,7 @@ router.route('/:id')
 		});
 	})
 
+// Delete user by id
 	.delete(function(req, res, next) {
 		User.findByIdAndRemove(req.params.id, function(err) {
 			res.status(204).end();
